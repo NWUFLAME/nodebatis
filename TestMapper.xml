@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TestMapper">
+    
+
+
+    <sql id="selectTestVo">
+        select id, name, create_by from test
+    </sql>
+
+    <select id="selectTestList">
+        <include refid="selectTestVo"/>
+        <where>  
+
+<if test="id != null and id != ''"> and id = #{id}</if>
+<!-- 模糊查询请打开注释 -->
+<!--  <if test="id != null and id != ''"> and id like concat('%', #{id}, '%')</if> -->
+<!-- 范围查询请打开注释 -->
+<!-- <if test="params.beginId != null and params.beginId != '' and params.endId != null and params.endId != ''"> and id between #{params.beginId} and #{params.endId}</if> -->
+
+
+<if test="name != null and name != ''"> and name = #{name}</if>
+<!-- 模糊查询请打开注释 -->
+<!--  <if test="name != null and name != ''"> and name like concat('%', #{name}, '%')</if> -->
+<!-- 范围查询请打开注释 -->
+<!-- <if test="params.beginName != null and params.beginName != '' and params.endName != null and params.endName != ''"> and name between #{params.beginName} and #{params.endName}</if> -->
+
+
+<if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+<!-- 模糊查询请打开注释 -->
+<!--  <if test="createBy != null and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if> -->
+<!-- 范围查询请打开注释 -->
+<!-- <if test="params.beginCreateBy != null and params.beginCreateBy != '' and params.endCreateBy != null and params.endCreateBy != ''"> and create_by between #{params.beginCreateBy} and #{params.endCreateBy}</if> -->
+
+        </where>
+    </select>
+    
+    <select id="selectTestById" >
+        <include refid="selectTestVo"/>
+        WHERE id = #{id}
+    </select>
+        
+    <insert id="insertTest"  useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO test
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="createBy != null">create_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="createBy != null">#{createBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTest">
+        UPDATE test
+        set money = money + #{amount}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteTestById" >
+        DELETE FROM test WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteTestByIds" >
+        DELETE FROM test WHERE id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

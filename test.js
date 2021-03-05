@@ -12,7 +12,7 @@ const nodebatis = Nodebatis({
     prodMode: false
 })
 
-// nodebatis.genXML()
+// nodebatis.genMapperXML()
 nodebatis.initFromFiles(['./TestMapper.xml']);
 // nodebatis.initFromDirs(['../RuoYi/ruoyi-system/src/main/resources/mapper/system']);
 
@@ -20,7 +20,6 @@ nodebatis.initFromFiles(['./TestMapper.xml']);
 
 async function testTrx() {
     const trx = await nodebatis.startTrx()
-
     try {
         await nodebatis.execute('TestMapper', 'updateTest', { id: 7, amount: -100 }, trx)
         console.log('reached here');
@@ -28,13 +27,8 @@ async function testTrx() {
         await nodebatis.execute('TestMapper', 'updateTest', { id: 1, amount: 100 }, trx)
         await trx.commit()
     } catch (error) {
-        console.log(error);
-        if (trx) {
-            await trx.rollback()
-            throw new Error('Transaction has been rollbacked due to execution failure')
-        }
-        throw new Error('failed to start a transaction')
+        await trx.rollback()
+        throw new Error('Transaction has been rollbacked due to execution failure')
     }
-
 }
 testTrx()

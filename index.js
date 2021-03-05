@@ -264,7 +264,7 @@ MybatisMapper.prototype.getMapper = function () {
   return myBatisMapper;
 };
 
-MybatisMapper.prototype.genXML = async function () {
+MybatisMapper.prototype.genMapperXML = async function () {
   const tables = await this.execute('GenTableMapper', 'selectDbTableList')
   console.log('<<<', tables, '>>>');
   const answers = await inquirer
